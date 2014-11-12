@@ -17,5 +17,9 @@
   },
   "engines": {
     "node": "0.10.x"
-  }
+  },
+  "files": [
+    "src"
+  ],
+  "main": "src/index.js"
 }
