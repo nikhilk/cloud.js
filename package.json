@@ -3,9 +3,16 @@
   "version": "0.1.0",
   "description": "CloudJS Runtime",
   "keywords": [
-    "cloud", "mobile", "backend", "rest", "http", "api",
-    "connect", "socketio",
-    "google", "gcp"
+    "cloud",
+    "mobile",
+    "backend",
+    "rest",
+    "http",
+    "api",
+    "connect",
+    "socketio",
+    "google",
+    "gcp"
   ],
   "author": "Nikhil Kothari",
   "license": "Apache 2.0",
@@ -14,6 +21,7 @@
     "url": "https://github.com/nikhilk/cloud.js"
   },
   "dependencies": {
+    "connect": "^3.3.3"
   },
   "engines": {
     "node": "0.10.x"
@@ -23,3 +31,4 @@
   ],
   "main": "src/index.js"
 }
+
