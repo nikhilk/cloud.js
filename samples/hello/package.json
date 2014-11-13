@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "cloud.js": "file:../.."
+  }
+}
+
