@@ -21,7 +21,8 @@
     "url": "https://github.com/nikhilk/cloud.js"
   },
   "dependencies": {
-    "connect": "^3.3.3"
+    "connect": "^3.3.3",
+    "yaml": "^0.2.3"
   },
   "engines": {
     "node": "0.10.x"
