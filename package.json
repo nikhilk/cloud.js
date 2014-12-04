@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "connect": "^3.3.3",
-    "yaml": "^0.2.3"
+    "yamljs": "^0.2.1"
   },
   "engines": {
     "node": "0.10.x"

@@ -1,21 +1,37 @@
 // app.js
 //
 
-var path = require('path');
+var fs = require('fs'),
+    path = require('path'),
+    yaml = require('yamljs');
 
-var _path = null;
+var _root = null;
 var _require = null;
 
 /**
  * Initializes the current application module.
- * @param {String} path  The root directory that the application is located in.
+ * @param {String} root  The root directory that the application is located in.
  * @param {Function} require  The module loader associated with the application.
  */
-function initializeApplication(path, require) {
-  console.log('Application "%s" initialized...', path);
+function initializeApplication(root, require) {
+  console.log('Initializing application "%s" ...', root);
 
-  _path = path;
+  _root = root;
   _require = require;
+
+  var settingsFile = path.join(root, 'config', 'app.yaml');
+  if (fs.existsSync(settingsFile)) {
+    try {
+      exports.settings = yaml.load(settingsFile);
+    }
+    catch (e) {
+      throw new Error('Unable to parse ' + settingsFile +
+                      ' as a valid YAML settings file.');
+    }
+  }
+  else {
+    exports.settings = {};
+  }
 }
 
 /**
@@ -29,11 +45,11 @@ function requireModule(name) {
 
 /**
  * Resolves the specified path against the application root path.
- * @param {String} path  The relative path to resolve.
+ * @param {String} relativePath  The relative path to resolve.
  * @returns  The full path.
  */
-function resolvePath(path) {
-  return path.join(_path, path);
+function resolvePath(relativePath) {
+  return path.join(_root, relativePath);
 }
 
 exports.initialize = initializeApplication;
