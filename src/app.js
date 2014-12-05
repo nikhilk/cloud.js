@@ -7,6 +7,16 @@ var fs = require('fs'),
 
 var _root = null;
 var _require = null;
+var _settings = null;
+
+/**
+ * Returns the application object that should be exposed to user code.
+ */
+function getApiObject() {
+  return {
+    settings: _settings
+  };
+}
 
 /**
  * Initializes the current application module.
@@ -22,7 +32,7 @@ function initializeApplication(root, require) {
   var settingsFile = path.join(root, 'config', 'app.yaml');
   if (fs.existsSync(settingsFile)) {
     try {
-      exports.settings = yaml.load(settingsFile);
+      _settings = yaml.load(settingsFile);
     }
     catch (e) {
       throw new Error('Unable to parse ' + settingsFile +
@@ -30,8 +40,9 @@ function initializeApplication(root, require) {
     }
   }
   else {
-    exports.settings = {};
+    _settings = {};
   }
+  export.settings = _settings;
 }
 
 /**
@@ -55,4 +66,5 @@ function resolvePath(relativePath) {
 exports.initialize = initializeApplication;
 exports.module = requireModule;
 exports.path = resolvePath;
+exports.api = getApiObject;
 

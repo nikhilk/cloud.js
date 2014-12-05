@@ -1,7 +1,16 @@
 // index.js
 //
 
-var app = require('./app.js');
+var app = require('./app.js'),
+    server = require('./server.js');
+
+/**
+ * Perform startup initialization.
+ */
+function initialize(path, require) {
+  app.initialize(path, require);
+  server.initialize();
+}
 
 /**
  * Runs the application.
@@ -9,7 +18,8 @@ var app = require('./app.js');
  * @param {Function} require  The module loader associated with the application.
  */
 function run(path, require) {
-  app.initialize(path, require);
+  initialize(path, require);
+  server.run();
 }
 
 exports.run = run;
