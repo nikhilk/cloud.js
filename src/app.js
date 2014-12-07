@@ -42,7 +42,7 @@ function initializeApplication(root, require) {
   else {
     _settings = {};
   }
-  export.settings = _settings;
+  exports.settings = _settings;
 }
 
 /**
