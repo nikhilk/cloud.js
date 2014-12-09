@@ -1,7 +1,13 @@
 // server.js
 //
 
-var http = require('http');
+var http = require('http'),
+    url = require('url'),
+    qs = require('querystring'),
+    fs = require('fs'),
+    connect = require('connect'),
+    bodyParser = require('body-parser'),
+    static = require('serve-static');
 var app = require('./app.js'),
     consts = require('./consts.js');
 
@@ -12,11 +18,35 @@ function requestHandler(request, response) {
   response.end('OK');
 }
 
+function queryParser(req, res, next) {
+  if (!req.query) {
+    req.query = ~req.url.indexOf('?') ? qs.parse(url.parse(req.url).query) : {};
+  }
+
+  next();
+}
+
 /**
  * Initializes the server.
  */
 function initializeServer() {
-  _httpServer = http.createServer(requestHandler);
+  // TODO: Enable configuration of the pipeline
+
+  var pipeline = connect();
+
+  var path = app.path('content');
+  if (fs.existsSync(path)) {
+    var stats = fs.statSync(path);
+    if (stats.isDirectory()) {
+      pipeline.use(static(path));
+    }
+  }
+
+  pipeline.use(bodyParser.json())
+          .use(queryParser)
+          .use(requestHandler);
+
+  _httpServer = http.createServer(pipeline);
 }
 
 /**

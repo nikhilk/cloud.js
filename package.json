@@ -21,7 +21,9 @@
     "url": "https://github.com/nikhilk/cloud.js"
   },
   "dependencies": {
+    "body-parser": "^1.10.0",
     "connect": "^3.3.3",
+    "serve-static": "^1.7.1",
     "yamljs": "^0.2.1"
   },
   "engines": {
@@ -32,4 +34,3 @@
   ],
   "main": "src/index.js"
 }
-
