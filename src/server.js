@@ -5,17 +5,29 @@ var http = require('http'),
     url = require('url'),
     qs = require('querystring'),
     fs = require('fs'),
+    routes = require('routes'),
     connect = require('connect'),
     bodyParser = require('body-parser'),
     static = require('serve-static');
 var app = require('./app.js'),
     consts = require('./consts.js');
 
-var _httpServer = null;
+var _handlers = [
+  require('./handlers/actions.js')
+];
+
+var _httpServer = null,
+    _routes = null;
 
 function requestHandler(request, response) {
-  response.writeHead(200, { 'Content-Type': 'text/plain' });
-  response.end('OK');
+  var matchingRoute = _routes.match(request.url);
+  if (matchingRoute) {
+    matchingRoute.fn(matchingRoute, request, response);
+  }
+  else {
+    response.writeHead(404);
+    response.end();
+  }
 }
 
 function queryParser(req, res, next) {
@@ -30,8 +42,13 @@ function queryParser(req, res, next) {
  * Initializes the server.
  */
 function initializeServer() {
-  // TODO: Enable configuration of the pipeline
+  _routes = routes();
+  _handlers.forEach(function(handler) {
+    handler.initialize();
+    _routes.addRoute(handler.route, handler.requestHandler);
+  });
 
+  // TODO: Enable configuration of the pipeline
   var pipeline = connect();
 
   var path = app.path('content');

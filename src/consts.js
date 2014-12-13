@@ -9,3 +9,7 @@ exports.defaults = {
   port: 8080
 };
 
+exports.routes = {
+  actions: '/api/:controller/:action?'
+}
+
