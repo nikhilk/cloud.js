@@ -10,6 +10,6 @@ exports.defaults = {
 };
 
 exports.routes = {
-  actions: '/api/:controller/:action?'
+  actions: '/api/:actionSet/:action?'
 }
 

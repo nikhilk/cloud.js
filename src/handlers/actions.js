@@ -9,7 +9,10 @@ function initialize() {
 
 function requestHandler(route, request, response) {
   response.writeHead(200, { 'Content-Type': 'text/plain' });
-  response.end(JSON.stringify(route));
+  response.write(JSON.stringify(route));
+  response.write('---');
+  response.write(JSON.stringify(request.query));
+  response.end();
 }
 
 exports.initialize = initialize;

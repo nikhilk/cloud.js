@@ -3,11 +3,11 @@
 
 var http = require('http'),
     url = require('url'),
-    qs = require('querystring'),
     fs = require('fs'),
     routes = require('routes'),
     connect = require('connect'),
     bodyParser = require('body-parser'),
+    queryParser = require('./middleware/queryparser.js'),
     static = require('serve-static');
 var app = require('./app.js'),
     consts = require('./consts.js');
@@ -20,7 +20,9 @@ var _httpServer = null,
     _routes = null;
 
 function requestHandler(request, response) {
-  var matchingRoute = _routes.match(request.url);
+  var parsedURL = url.parse(request.url);
+
+  var matchingRoute = _routes.match(parsedURL.pathname);
   if (matchingRoute) {
     matchingRoute.fn(matchingRoute, request, response);
   }
@@ -28,14 +30,6 @@ function requestHandler(request, response) {
     response.writeHead(404);
     response.end();
   }
-}
-
-function queryParser(req, res, next) {
-  if (!req.query) {
-    req.query = ~req.url.indexOf('?') ? qs.parse(url.parse(req.url).query) : {};
-  }
-
-  next();
 }
 
 /**
@@ -60,7 +54,7 @@ function initializeServer() {
   }
 
   pipeline.use(bodyParser.json())
-          .use(queryParser)
+          .use(queryParser.parser)
           .use(requestHandler);
 
   _httpServer = http.createServer(pipeline);
