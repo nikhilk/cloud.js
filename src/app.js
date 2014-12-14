@@ -57,10 +57,17 @@ function requireModule(name) {
 /**
  * Resolves the specified path against the application root path.
  * @param {String} relativePath  The relative path to resolve.
+ * @param {String} relativePaths  Placeholder for indicating more path segments.
  * @returns  The full path.
  */
-function resolvePath(relativePath) {
-  return path.join(_root, relativePath);
+function resolvePath(relativePath, relativePaths) {
+  if (!relativePaths) {
+    return path.join(_root, relativePath);
+  }
+  else {
+    var segments = [_root].concat(Array.prototype.slice.call(arguments));
+    return path.join.apply(null, segments);
+  }
 }
 
 exports.initialize = initializeApplication;
