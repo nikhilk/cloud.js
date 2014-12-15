@@ -13,7 +13,7 @@ var app = require('./app.js'),
     consts = require('./consts.js');
 
 var _handlers = [
-  require('./handlers/actions.js')
+  require('./actions/handler.js')
 ];
 
 var _httpServer = null,
@@ -39,7 +39,7 @@ function initializeServer() {
   _routes = routes();
   _handlers.forEach(function(handler) {
     handler.initialize();
-    _routes.addRoute(handler.route, handler.requestHandler);
+    _routes.addRoute(handler.route, handler);
   });
 
   // TODO: Enable configuration of the pipeline

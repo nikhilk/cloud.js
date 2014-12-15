@@ -65,7 +65,7 @@ function resolvePath(relativePath, relativePaths) {
     return path.join(_root, relativePath);
   }
   else {
-    var segments = [_root].concat(Array.prototype.slice.call(arguments));
+    var segments = [ _root ].concat(Array.prototype.slice.call(arguments));
     return path.join.apply(null, segments);
   }
 }
