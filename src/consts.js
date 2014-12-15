@@ -9,6 +9,10 @@ exports.defaults = {
   port: 8080
 };
 
+exports.values = {
+  supportedHTTPMethods: [ 'GET', 'POST', 'PUT', 'DELETE', 'OPTIONS' ]
+};
+
 exports.routes = {
   actions: '/api/:actionSet/:action?'
 }

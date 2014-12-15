@@ -71,7 +71,7 @@ function resolvePath(relativePath, relativePaths) {
 }
 
 exports.initialize = initializeApplication;
-exports.module = requireModule;
+exports.require = requireModule;
 exports.path = resolvePath;
 exports.api = getApiObject;
 
