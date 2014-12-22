@@ -1,0 +1,1 @@
+request.result = this.state;

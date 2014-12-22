@@ -24,7 +24,7 @@ function requestHandler(request, response) {
 
   var matchingRoute = _routes.match(parsedURL.pathname);
   if (matchingRoute) {
-    matchingRoute.fn(matchingRoute, request, response);
+    matchingRoute.fn(matchingRoute, parsedURL.pathname, request, response);
   }
   else {
     response.writeHead(404);
