@@ -44,13 +44,13 @@ function requestHandler(route, path, request, response) {
   }
 
   var requestObject = {
+    _httpRequest: request,
+    _httpResponse: response,
     url: request.url,
     path: path,
-    query: request.query,
-    data: request.body,
-    method: request.method,
-    httpRequest: request,
-    httpResponse: response
+    id: route.params.id,
+    params: request.query,
+    data: request.body
   };
 
   var result;
@@ -66,21 +66,41 @@ function requestHandler(route, path, request, response) {
     error = e;
   }
 
+  var statusCode = 200;
+  var content = null;
+  var contentType = 'text/plain';
+  var contentLength = 0;
+
   if (error) {
-    response.writeHead(500, { 'Content-Type': 'text/plain' });
-    response.end(error.toString());
+    statusCode = 500;
+    content = error.toString();
   }
   else if ((result === undefined) || (result === null)) {
-    response.writeHead(204);
+    statusCode = 204;
   }
   else if (typeof(result) != 'object') {
-    response.writeHead(200, { 'Content-Type': 'text/plain' });
-    response.end(result.toString());
+    // Handles number, string, function
+    content = result.toString();
+  }
+  else if (result.constructor === Buffer) {
+    content = result;
+    contentType = result.mimeType || 'application/octet-stream';
+    contentLength = result.length;
   }
   else {
-    response.writeHead(200, { 'Content-Type': 'application/json' });
-    response.end(JSON.stringify(result));
+    content = JSON.stringify(result);
+    contentType = 'application/json';
   }
+
+  if (content && !contentLength) {
+    contentLength = Buffer.byteLength(content);
+  }
+
+  response.writeHead(statusCode, { 'Content-Type': contentType, 'Content-Length': contentLength });
+  if (statusCode != 204) {
+    response.write(content);
+  }
+  response.end();
 }
 
 requestHandler.route = consts.routes.actions;

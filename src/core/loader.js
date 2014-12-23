@@ -12,28 +12,27 @@ function readScript(path) {
   return fs.readFileSync(path, 'utf8');
 }
 
-function runScript(script) {
+exports.loadObject = function(path) {
   var context = {
     require: app.require,
     app: app.api(),
     console: console
   };
 
+  var script = readScript(path);
   if (script) {
     vm.runInNewContext(script, context);
   }
   return context;
-}
-
-exports.loadObject = function(path) {
-  return runScript(readScript(path));
 };
 
 exports.loadFunction = function(path, args) {
   var allArgs = [ 'require', 'console' ].concat(args).join(',');
   var script = 'function __f(' + allArgs + ') { ' + readScript(path) + ' }';
 
-  var objects = runScript(script);
-  return objects.__f;
+  var context = {};
+  vm.runInNewContext(script, context);
+
+  return context.__f;
 };
 
