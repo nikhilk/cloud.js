@@ -1,6 +1,7 @@
 // actions.js
 //
 
+var stream = require('stream');
 var app = require('../app.js'),
     consts = require('../consts.js'),
     loader = require('../core/loader.js');
@@ -70,10 +71,16 @@ function requestHandler(route, path, request, response) {
   var content = null;
   var contentType = 'text/plain';
   var contentLength = 0;
+  var contentStream = false;
 
   if (error) {
     statusCode = 500;
-    content = error.toString();
+    if (error.constructor === Error) {
+      content = 'Error ctor; ' + error.message + '\n\n' + error.stack;
+    }
+    else {
+      content = error.toString();
+    }
   }
   else if ((result === undefined) || (result === null)) {
     statusCode = 204;
@@ -82,25 +89,36 @@ function requestHandler(route, path, request, response) {
     // Handles number, string, function
     content = result.toString();
   }
-  else if (result.constructor === Buffer) {
+  else if (result instanceof Buffer) {
     content = result;
     contentType = result.mimeType || 'application/octet-stream';
     contentLength = result.length;
+  }
+  else if (result instanceof stream.Readable) {
+    content = result;
+    contentType = result.mimeType || 'application/octet-stream';
+    contentStream = true;
   }
   else {
     content = JSON.stringify(result);
     contentType = 'application/json';
   }
 
-  if (content && !contentLength) {
+  if (content && !contentStream && !contentLength) {
     contentLength = Buffer.byteLength(content);
   }
 
-  response.writeHead(statusCode, { 'Content-Type': contentType, 'Content-Length': contentLength });
-  if (statusCode != 204) {
-    response.write(content);
+  if (!contentStream) {
+    response.writeHead(statusCode, { 'Content-Type': contentType, 'Content-Length': contentLength });
+    if (statusCode != 204) {
+      response.write(content);
+    }
+    response.end();
   }
-  response.end();
+  else {
+    response.writeHead(statusCode, { 'Content-Type': contentType });
+    content.pipe(response);
+  }
 }
 
 requestHandler.route = consts.routes.actions;

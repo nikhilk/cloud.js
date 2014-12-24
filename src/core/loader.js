@@ -21,7 +21,7 @@ exports.loadObject = function(path) {
 
   var script = readScript(path);
   if (script) {
-    vm.runInNewContext(script, context);
+    vm.runInNewContext(script, context, path);
   }
   return context;
 };
@@ -31,7 +31,7 @@ exports.loadFunction = function(path, args) {
   var script = 'function __f(' + allArgs + ') { ' + readScript(path) + ' }';
 
   var context = {};
-  vm.runInNewContext(script, context);
+  vm.runInNewContext(script, context, path);
 
   return context.__f;
 };
