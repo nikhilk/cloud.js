@@ -115,7 +115,9 @@ function requestHandler(route, path, request, response) {
   }
   else {
     response.writeHead(statusCode, { 'Content-Type': contentType });
-    content.pipe(response);
+    content.pipe(response).on('close', function() {
+      response.end();
+    });
   }
 }
 
