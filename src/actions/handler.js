@@ -75,10 +75,8 @@ function requestHandler(route, path, request, response) {
 
   if (error) {
     statusCode = 500;
-    if (error.constructor === Error) {
-      content = 'Error ctor; ' + error.message + '\n\n' + error.stack;
-    }
-    else {
+    content = error.stack;
+    if (!content) {
       content = error.toString();
     }
   }
