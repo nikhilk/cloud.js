@@ -35,7 +35,7 @@ function requestHandler(route, path, request, response) {
     }
 
     if (typeof(action.script) != 'function') {
-      action.script = loader.loadFunction(action.script, [ 'request' ]);
+      action.script = loader.loadFunction(action.script, 'action', [ 'request' ]);
     }
   }
   catch (e) {

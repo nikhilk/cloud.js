@@ -13,7 +13,7 @@ function readScript(path) {
 }
 
 exports.loadObject = function(path) {
-  var context = {
+  var globals = {
     require: app.require,
     app: app.api(),
     console: console
@@ -21,18 +21,18 @@ exports.loadObject = function(path) {
 
   var script = readScript(path);
   if (script) {
-    vm.runInNewContext(script, context, path);
+    vm.runInNewContext(script, globals, path);
   }
-  return context;
+  return globals;
 };
 
-exports.loadFunction = function(path, args) {
+exports.loadFunction = function(path, name, args) {
   var allArgs = [ 'require', 'console' ].concat(args).join(',');
-  var script = 'function __f(' + allArgs + ') { ' + readScript(path) + ' }';
+  var script = 'function ' + name + '(' + allArgs + ') { ' + readScript(path) + ' }';
 
-  var context = {};
-  vm.runInNewContext(script, context, path);
+  var globals = {};
+  vm.runInNewContext(script, globals, path);
 
-  return context.__f;
+  return globals[name];
 };
 
