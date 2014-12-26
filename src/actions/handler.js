@@ -31,8 +31,8 @@ function resolveAction(route) {
   return action;
 }
 
-function requestHandler(route, request, response) {
-  var requestObject = {
+function createRequestApi(route, request, response) {
+  return {
     _httpRequest: request,
     _httpResponse: response,
     id: request.id,
@@ -43,16 +43,20 @@ function requestHandler(route, request, response) {
     data: request.body,
     log: request.log
   };
+}
 
+function requestHandler(route, request, response) {
   var statusCode = 200;
   var result;
   var error;
   try {
     var action = resolveAction(route);
     if (action) {
-      result = action.script(app.require, console, requestObject);
+      var requestApi = createRequestApi(route, request, response);
+
+      result = action.script(app.require, console, requestApi);
       if (result === undefined) {
-        result = requestObject.result;
+        result = requestApi.result;
       }
     }
     else {
