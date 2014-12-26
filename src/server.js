@@ -25,7 +25,9 @@ function requestHandler(request, response) {
 
   var matchingRoute = _routes.match(parsedURL.pathname);
   if (matchingRoute) {
-    matchingRoute.fn(matchingRoute, parsedURL.pathname, request, response);
+    matchingRoute.method = request.method.toUpperCase();
+    matchingRoute.path = parsedURL.pathname;
+    matchingRoute.fn(matchingRoute, request, response);
   }
   else {
     response.writeHead(404);

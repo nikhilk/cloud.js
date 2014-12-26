@@ -9,76 +9,72 @@ var metadata = require('./metadata.js');
 
 var _actionSets = null;
 
-function requestHandler(route, path, request, response) {
+function resolveAction(route) {
   var action = null;
 
   var actionSet = _actionSets[route.params.actionSet];
   if (actionSet) {
-    action = actionSet.actions[route.params.action || request.method.toUpperCase()];
+    action = actionSet.actions[route.params.action || route.method];
   }
 
-  if (!action) {
-    response.writeHead(404);
-    response.end();
-    return;
-  }
-
-  if (action.httpMethod != request.method.toUpperCase()) {
-    response.writeHead(405);
-    response.end();
-    return;
-  }
-
-  try {
+  if (action && (action.httpMethod == route.method)) {
     if (!actionSet.thisObject || (typeof(actionSet.thisObject) != 'object')) {
       actionSet.thisObject = loader.loadObject(actionSet.thisObject);
     }
 
     if (typeof(action.script) != 'function') {
-      action.script = loader.loadFunction(action.script, 'action', [ 'request' ]);
+      action.script = loader.loadFunction(action.script, 'action', [ 'request' ],
+                                          actionSet.thisObject);
     }
   }
-  catch (e) {
-    response.writeHead(500);
-    response.end();
-    return;
-  }
 
+  return action;
+}
+
+function requestHandler(route, request, response) {
   var requestObject = {
     _httpRequest: request,
     _httpResponse: response,
+    id: request.id,
     url: request.url,
-    path: path,
-    id: route.params.id,
+    path: route.path,
+    qualifier: route.params.qualifier,
     params: request.query,
     data: request.body,
     log: request.log
   };
 
+  var statusCode = 200;
   var result;
   var error;
   try {
-    result = action.script.call(actionSet.thisObject,
-                                app.require, console, requestObject);
-    if (result === undefined) {
-      result = requestObject.result;
+    var action = resolveAction(route);
+    if (action) {
+      result = action.script(app.require, console, requestObject);
+      if (result === undefined) {
+        result = requestObject.result;
+      }
+    }
+    else {
+      statusCode = 404;
     }
   }
   catch (e) {
     error = e;
+    statusCode = 500;
   }
 
-  var statusCode = 200;
-  var content = null;
+  var content = '';
   var contentType = 'text/plain';
   var contentLength = 0;
   var contentStream = false;
 
-  if (error) {
-    statusCode = 500;
-    content = error.stack;
-    if (!content) {
-      content = error.toString();
+  if (statusCode != 200) {
+    if (error) {
+      content = error.stack;
+      if (!content) {
+        content = error.toString();
+      }
     }
   }
   else if ((result === undefined) || (result === null)) {

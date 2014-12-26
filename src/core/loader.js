@@ -26,13 +26,13 @@ exports.loadObject = function(path) {
   return globals;
 };
 
-exports.loadFunction = function(path, name, args) {
+exports.loadFunction = function(path, name, args, thisObject) {
   var allArgs = [ 'require', 'console' ].concat(args).join(',');
   var script = 'function ' + name + '(' + allArgs + ') { ' + readScript(path) + ' }';
 
   var globals = {};
   vm.runInNewContext(script, globals, path);
 
-  return globals[name];
+  return globals[name].bind(thisObject);
 };
 

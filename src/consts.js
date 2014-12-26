@@ -14,6 +14,6 @@ exports.values = {
 };
 
 exports.routes = {
-  actions: '/api/:actionSet/:action?/:id?'
+  actions: '/api/:actionSet/:action?/:qualifier?'
 }
 
