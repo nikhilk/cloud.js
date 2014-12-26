@@ -8,6 +8,7 @@ var http = require('http'),
     connect = require('connect'),
     bodyParser = require('body-parser'),
     queryParser = require('./middleware/queryparser.js'),
+    logging = require('./middleware/logging.js'),
     static = require('serve-static');
 var app = require('./app.js'),
     consts = require('./consts.js');
@@ -53,7 +54,8 @@ function initializeServer() {
     }
   }
 
-  pipeline.use(bodyParser.json())
+  pipeline.use(logging.logger)
+          .use(bodyParser.json())
           .use(queryParser.parser)
           .use(requestHandler);
 

@@ -51,7 +51,8 @@ function requestHandler(route, path, request, response) {
     path: path,
     id: route.params.id,
     params: request.query,
-    data: request.body
+    data: request.body,
+    log: request.log
   };
 
   var result;
