@@ -54,7 +54,7 @@ function requestHandler(route, request, response) {
     if (action) {
       var requestApi = createRequestApi(route, request, response);
 
-      result = action.script(app.require, console, requestApi);
+      result = action.script(requestApi);
       if (result === undefined) {
         result = requestApi.result;
       }
