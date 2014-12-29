@@ -35,6 +35,7 @@ function createRequestApi(route, request, response) {
   return {
     _httpRequest: request,
     _httpResponse: response,
+    _route: route,
     id: request.id,
     url: request.url,
     path: route.path,

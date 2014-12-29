@@ -2,32 +2,26 @@
 //
 
 var os = require('os');
-var bunyan = require('bunyan'),
-    uuid = require('node-uuid');
-var app = require('../app.js');
+var uuid = require('node-uuid');
+var app = require('../app.js'),
+    logger = require('../core/logger.js');
 
-var log = bunyan.createLogger({
-  name: 'requests',
-  hostname: os.hostname(),
-  pid: process.pid,
-  serializers: {
-    req: function(request) {
-      return {
-        url: request.url,
-        method: request.method
-      };
-    },
-    res: function(response) {
-      return {
-        status: response.statusCode,
-        duration: response.duration
-      };
-    }
+var _serializers = {
+  req: function(request) {
+    return {
+      url: request.url,
+      method: request.method
+    };
   },
-  streams: [
-    { stream: process.stdout, level: 'info' }
-  ]
-});
+  res: function(response) {
+    return {
+      status: response.statusCode,
+      duration: response.duration
+    };
+  }
+};
+
+var _log = logger.createLog('requests', /* streams */ null, _serializers);
 
 exports.logger = function(req, res, next) {
   var requestId = req.headers['x-request-id'];
@@ -36,7 +30,7 @@ exports.logger = function(req, res, next) {
   }
 
   req.id = requestId;
-  req.log = log.child({ id: requestId });
+  req.log = logger.createChildLog(_log, { id: requestId });
 
   var startTime = new Date();
   function generateLog() {
@@ -45,7 +39,7 @@ exports.logger = function(req, res, next) {
 
     res.duration = new Date() - startTime;
 
-    log.info({ id: requestId, req: req, res: res, time: startTime });
+    req.log.info({ req: req, res: res, time: startTime });
   }
 
   res.setHeader('X-Request-Id', requestId);

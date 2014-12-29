@@ -4,17 +4,20 @@
 var fs = require('fs'),
     path = require('path'),
     yaml = require('yamljs');
+var logger = require('./core/logger.js');
 
-var _root = null;
+var _rootPath = null;
 var _require = null;
 var _settings = null;
+var _log = null;
 
 /**
  * Returns the application object that should be exposed to user code.
  */
 function getApiObject() {
   return {
-    settings: _settings
+    settings: _settings,
+    log: _log
   };
 }
 
@@ -24,9 +27,10 @@ function getApiObject() {
  * @param {Function} require  The module loader associated with the application.
  */
 function initializeApplication(root, require) {
-  console.log('Initializing application "%s" ...', root);
+  _log = logger.createLog('app');
+  _log.debug('Initializing application "%s" ...', root);
 
-  _root = root;
+  _rootPath = root;
   _require = require;
 
   var settingsFile = path.join(root, 'config', 'app.yaml');
@@ -35,14 +39,18 @@ function initializeApplication(root, require) {
       _settings = yaml.load(settingsFile);
     }
     catch (e) {
-      throw new Error('Unable to parse ' + settingsFile +
-                      ' as a valid YAML settings file.');
+      _log.error('Unable to parse "%s" as a valid YAML settings file.', settingsFile);
+      return false;
     }
   }
   else {
     _settings = {};
   }
+
   exports.settings = _settings;
+  exports.log = _log;
+
+  return true;
 }
 
 /**
@@ -62,16 +70,16 @@ function requireModule(name) {
  */
 function resolvePath(relativePath, relativePaths) {
   if (!relativePaths) {
-    return path.join(_root, relativePath);
+    return path.join(_rootPath, relativePath);
   }
   else {
-    var segments = [ _root ].concat(Array.prototype.slice.call(arguments));
+    var segments = [ _rootPath ].concat(Array.prototype.slice.call(arguments));
     return path.join.apply(null, segments);
   }
 }
 
 exports.initialize = initializeApplication;
 exports.require = requireModule;
-exports.path = resolvePath;
+exports.resolve = resolvePath;
 exports.api = getApiObject;
 

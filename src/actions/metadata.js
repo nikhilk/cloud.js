@@ -68,7 +68,7 @@ function loadActionSet(setName, setPath) {
 function load() {
   var actionSets = {};
 
-  var actionsPath = app.path('code', 'actions');
+  var actionsPath = app.resolve('code', 'actions');
   if (fs.existsSync(actionsPath) && fs.statSync(actionsPath).isDirectory()) {
     fs.readdirSync(actionsPath).forEach(function(setName) {
       var setPath = path.join(actionsPath, setName);

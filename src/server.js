@@ -48,7 +48,7 @@ function initializeServer() {
   // TODO: Enable configuration of the pipeline
   var pipeline = connect();
 
-  var path = app.path('content');
+  var path = app.resolve('content');
   if (fs.existsSync(path)) {
     var stats = fs.statSync(path);
     if (stats.isDirectory()) {
@@ -74,7 +74,7 @@ function runServer() {
   port = parseInt(port, 10);
 
   _httpServer.listen(port);
-  console.log('Started server at http://localhost:' + port);
+  app.log.debug('Started server at http://localhost:%d', port);
 }
 
 exports.initialize = initializeServer;
