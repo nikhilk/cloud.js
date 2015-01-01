@@ -27,7 +27,7 @@ function getApiObject() {
  * @param {Function} require  The module loader associated with the application.
  */
 function initializeApplication(root, require) {
-  _log = logger.createLog('app');
+  _log = logger.createLogger('app');
   _log.debug('Initializing application "%s" ...', root);
 
   _rootPath = root;
