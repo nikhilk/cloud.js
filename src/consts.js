@@ -10,10 +10,17 @@ exports.defaults = {
 };
 
 exports.values = {
-  supportedHTTPMethods: [ 'GET', 'POST', 'PUT', 'DELETE', 'OPTIONS' ]
+  supportedHTTPMethods: [ 'GET', 'POST', 'PUT', 'DELETE', 'OPTIONS' ],
+  supportedDataOperations: {
+    'READ': 'GET',
+    'INSERT': 'PUT',
+    'UPDATE': 'POST',
+    'DELETE': 'DELETE'
+  }
 };
 
 exports.routes = {
-  actions: '/api/:actionSet/:action?/:qualifier?'
+  actions: '/actions/:actionSet/:action?/:qualifier?',
+  data: '/data/:model/:id?/:operation?'
 }
 

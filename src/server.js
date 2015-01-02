@@ -14,7 +14,8 @@ var app = require('./app.js'),
     consts = require('./consts.js');
 
 var _handlers = [
-  require('./actions/handler.js')
+  require('./actions/handler.js'),
+  require('./data/handler.js')
 ];
 
 var _httpServer = null,

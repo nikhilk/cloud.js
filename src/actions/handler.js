@@ -1,4 +1,4 @@
-// actions.js
+// handler.js
 //
 
 var stream = require('stream');
