@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "cloud.js": "file:../.."
+  },
+  "scripts": {
+    "start": "node main.js"
+  }
+}
