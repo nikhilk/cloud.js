@@ -5,6 +5,7 @@
 - Logging (customization, log rotation, in-memory ring)
 - Authorization
 - Telemetry
+- Console
 
 ## Actions
 
@@ -13,7 +14,8 @@
 ## Models
 
 - CRUD
-- Data sources
+- Custom actions
+- Data sources (in-memory, datastore, sql, mongodb)
 - Default behavior
 - Validation
 
@@ -28,4 +30,9 @@
 ## Services
 
 - Users and authN
+- Push notification
+- Queues
+- Locks
+- Crypto
+- Leaderboard
 
