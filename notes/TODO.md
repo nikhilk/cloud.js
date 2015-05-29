@@ -2,6 +2,7 @@
 
 ## Infrastructure
 
+- ExpressJS and middleware
 - Logging (customization, log rotation, in-memory ring)
 - Authorization
 - Telemetry
