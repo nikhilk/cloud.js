@@ -11,8 +11,9 @@
     "api",
     "connect",
     "socketio",
-    "google",
-    "gcp"
+    "script",
+    "framework",
+    "convention"
   ],
   "author": "Nikhil Kothari",
   "license": "Apache 2.0",
