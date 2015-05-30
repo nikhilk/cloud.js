@@ -1,4 +1,6 @@
 {
+  "name": "Todo Application",
+  "description": "Todo cloud.js sample application.",
   "dependencies": {
     "cloud.js": "file:../.."
   },

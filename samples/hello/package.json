@@ -1,4 +1,6 @@
 {
+  "name": "Hello World",
+  "description": "Hello World cloud.js sample application",
   "dependencies": {
     "cloud.js": "file:../..",
     "qr-image": "^3.0.0"
