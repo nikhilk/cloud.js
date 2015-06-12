@@ -37,3 +37,9 @@
 - Crypto
 - Leaderboard
 
+## Deployment
+
+- Docker container
+- Managed VMs
+- Clusters
+
