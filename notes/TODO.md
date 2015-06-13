@@ -36,6 +36,7 @@
 - Locks
 - Crypto
 - Leaderboard
+- CRON
 
 ## Deployment
 
