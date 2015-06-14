@@ -37,6 +37,7 @@
 - Crypto
 - Leaderboard
 - CRON
+- Telemetry/Measurement protocol
 
 ## Deployment
 
