@@ -23,6 +23,7 @@
 ## Channels
 
 - Hubs
+- Server to client, and broadcast notifications
 
 ## Backends
 
