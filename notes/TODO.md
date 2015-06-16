@@ -31,6 +31,7 @@
 
 ## Services
 
+- Files and resources
 - Users and authN
 - Push notification
 - Queues
@@ -46,3 +47,6 @@
 - Managed VMs
 - Clusters
 
+## Cloud specific
+
+- Google - datastore, storage, bq, pub/sub
