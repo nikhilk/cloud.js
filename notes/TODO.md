@@ -7,6 +7,7 @@
 - Authorization
 - Telemetry
 - Console
+- Static content
 
 ## Actions
 
