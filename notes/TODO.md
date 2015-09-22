@@ -40,6 +40,7 @@
 - Crypto
 - Leaderboard
 - CRON
+- Triggers
 - Telemetry/Measurement protocol
 
 ## Deployment
